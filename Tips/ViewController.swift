@@ -155,6 +155,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             tipControl.setTitle(percentage1 + "%", forSegmentAtIndex: 0)
             tipPercentages[0] = (NSString(string: percentage1).doubleValue)/100
 
+
         }
         
         if let percentage2 = defaults.stringForKey("Default_Percentage2")
