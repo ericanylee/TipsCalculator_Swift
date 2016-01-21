@@ -236,7 +236,7 @@
                             </label>
                         </subviews>
                         <animations/>
-                        <color key="backgroundColor" red="0.85098039215686272" green="1" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.89803921568627454" green="1" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="J3s-Sm-Uyc" appends="YES" id="Ya4-B5-fZu"/>

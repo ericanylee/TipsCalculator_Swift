@@ -5,7 +5,8 @@
 //  Created by Erica Lee on 12/27/15.
 //  Copyright © 2015 EricaLee. All rights reserved.
 //
-// BUGS TO FIX : Colors!!! The first $ does not match the typed view text box color
+//  TODO: add remembering last bill feature
+// ADd local currency formatting
 
 import UIKit
 
@@ -21,7 +22,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBOutlet weak var SplitPicker: UIPickerView!
     var pickerData = ["1","2","3","4","5","6","7","8","9","10"] //for splitting people
     var attr = NSDictionary(object: UIFont(name: "HelveticaNeue-Bold", size: 16.0)!, forKey: NSFontAttributeName) //font
-    var split = 1.0
+    var split = 1.0 // default split
     var tipPercentages = [0.18, 0.2, 0.22] //default tip values
     
     
@@ -34,18 +35,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         split = Double(row) + 1.0
 
         InitialView.bringSubviewToFront(InitialView)
-        //update Total when picker is selected
-        let tipPercentage = tipPercentages[tipControl.selectedSegmentIndex]
-        
-        let billAmount = NSString(string: BillField.text!).doubleValue
-        let tip = billAmount * tipPercentage
-        let total = (billAmount + tip)/split
-        
-        tipLabel.text = "$\(tip)"
-        totalLabel.text = "$\(total)"
-        
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+
+        UpdateTotalBill()
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -93,6 +84,24 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
     }
 
+    func UpdateTotalBill(){
+        
+        let tipPercentage = tipPercentages[tipControl.selectedSegmentIndex]
+        let billAmount = NSString(string: BillField.text!).doubleValue
+        let tip = billAmount * tipPercentage
+        let total = (billAmount + tip)/split
+        
+        tipLabel.text = String(format: "$%.2f", tip)
+        totalLabel.text = String(format: "$%.2f", total)
+        
+        ///var formatter = NSNumberFormatter()
+        //formatter.numberStyle = .CurrencyStyle
+                
+        //tipLabel.text = String(formatter.stringFromNumber(tip))
+        //totalLabel.text = String(formatter.stringFromNumber(total)) // "$123.44"
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -124,21 +133,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
             self.TypedView.alpha = 0
         }
         
-        //UIView.animateWithDuration(0.4, animations: {
-            // This causes first view to fade in and second view to fade out
-          //  self.TypedView.alpha = 1
-        //})
-        
-        let tipPercentage = tipPercentages[tipControl.selectedSegmentIndex]
-        let billAmount = NSString(string: BillField.text!).doubleValue
-        let tip = billAmount * tipPercentage
-        let total = (billAmount + tip)/split
-        
-        tipLabel.text = "$\(tip)"
-        totalLabel.text = "$\(total)"
-        
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+        UpdateTotalBill()
+
     }
 
     @IBAction func onTap(sender: AnyObject) {
@@ -150,7 +146,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         super.viewWillAppear(animated)
 
         //Retrieve the Default Tip Percentages and set it to tipControl
-        
         var defaults: NSUserDefaults = NSUserDefaults.standardUserDefaults()
 
 
@@ -182,21 +177,14 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let index = defaults.integerForKey("Default_Index")
         tipControl.selectedSegmentIndex = index
         
-        //Update Bill Total
-        let tipPercentage = tipPercentages[tipControl.selectedSegmentIndex]
-        
-        let billAmount = NSString(string: BillField.text!).doubleValue
-        let tip = billAmount * tipPercentage
-        let total = (billAmount + tip)/split
-        
-        tipLabel.text = "$\(tip)"
-        totalLabel.text = "$\(total)"
-        
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+        UpdateTotalBill()
 
+        //let billAmount = NSString(string: BillField.text!).doubleValue
+        //Save the Bill for restarting the app
+        //defaults.setObject(billAmount, forKey: "Last_Bill")
+        //let date = NSDate()
     }
-        
+    
     
 }
 
